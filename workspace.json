@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "projects": {
+    "api": "packages/api",
+    "components": "packages/components",
+    "interfaces": "packages/interfaces",
+    "site": "packages/site",
+    "site-e2e": "packages/site-e2e"
+  },
+  "executor": "@jscutlery/semver:version",
+  "options": {
+    "baseBranch": "master",
+    "tagPrefix": "${projectName}@"
+  }
+}

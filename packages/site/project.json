@@ -1,0 +1,78 @@
+{
+  "root": "packages/site",
+  "sourceRoot": "packages/site/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/packages/site",
+        "index": "packages/site/src/index.html",
+        "baseHref": "/",
+        "main": "packages/site/src/main.tsx",
+        "polyfills": "packages/site/src/polyfills.ts",
+        "tsConfig": "packages/site/tsconfig.app.json",
+        "assets": ["packages/site/src/favicon.ico", "packages/site/src/assets"],
+        "styles": [],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "packages/site/src/environments/environment.ts",
+              "with": "packages/site/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "site:build",
+        "hmr": true,
+        "proxyConfig": "packages/site/proxy.conf.json"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "site:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/site/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/site"],
+      "options": {
+        "jestConfig": "packages/site/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional",
+        "commitMessageFormat": "chore(${projectName}): release version ${version}"
+      }
+    }
+  },
+  "tags": []
+}
