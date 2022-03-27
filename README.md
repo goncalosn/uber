@@ -6,7 +6,7 @@ An uber inspired project
 
 ## Bootstrap
 
-Run `npm install && pnpm import`
+Run `pnpm install`
 
 ## Release a new version
 
