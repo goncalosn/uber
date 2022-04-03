@@ -4,50 +4,21 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/web:webpack",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "compiler": "babel",
-        "outputPath": "dist/packages/site",
-        "index": "packages/site/src/index.html",
-        "baseHref": "/",
-        "main": "packages/site/src/main.tsx",
-        "polyfills": "packages/site/src/polyfills.ts",
-        "tsConfig": "packages/site/tsconfig.app.json",
-        "assets": ["packages/site/src/favicon.ico", "packages/site/src/assets"],
-        "styles": [],
-        "scripts": [],
-        "webpackConfig": "@nrwl/react/plugins/webpack"
-      },
-      "configurations": {
-        "production": {
-          "fileReplacements": [
-            {
-              "replace": "packages/site/src/environments/environment.ts",
-              "with": "packages/site/src/environments/environment.prod.ts"
-            }
-          ],
-          "optimization": true,
-          "outputHashing": "all",
-          "sourceMap": false,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false
-        }
+        "command": "tsc && vite build",
+        "cwd": "packages/site"
       }
     },
     "serve": {
-      "executor": "@nrwl/web:dev-server",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "buildTarget": "site:build",
-        "hmr": true,
-        "proxyConfig": "packages/site/proxy.conf.json"
+        "command": "vite",
+        "cwd": "packages/site"
       },
       "configurations": {
         "production": {
-          "buildTarget": "site:build:production",
-          "hmr": false
+          "command": "vite preview"
         }
       }
     },

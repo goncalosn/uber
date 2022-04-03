@@ -1,1 +1,3 @@
-export * from './lib/components';
+import HelloWorld from './lib/HelloWorld';
+
+export { HelloWorld };
