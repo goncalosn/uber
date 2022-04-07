@@ -1,18 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import legacy from '@vitejs/plugin-legacy';
 import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   if (command === 'serve') {
-    if (mode === 'production')
-      return {
-        plugins: [react()],
-        base: path.resolve(__dirname, '../dist/packages/site/'),
-        // root: path.resolve(__dirname, '../dist/packages/site/index.html'),
-      };
     return {
-      plugins: [react()],
+      plugins: [react(), legacy()],
       resolve: {
         alias: {
           '@uber/components': path.resolve(__dirname, '../components/src'),
@@ -22,9 +17,7 @@ export default defineConfig(({ command, mode }) => {
   } else {
     // command === 'build'
     return {
-      plugins: [react()],
-      // base: path.resolve(__dirname, '../../dist/packages/site/'),
-      // base: '',
+      plugins: [react(), legacy()],
       build: {
         outDir: path.resolve(__dirname, '../../dist/packages/site'),
         emptyOutDir: true,

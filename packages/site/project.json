@@ -7,19 +7,15 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "tsc && vite build",
-        "cwd": "packages/site"
+        "cwd": "packages/site",
+        "parallel": false
       }
     },
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "vite",
+        "command": "vite --open",
         "cwd": "packages/site"
-      },
-      "configurations": {
-        "production": {
-          "command": "vite preview"
-        }
       }
     },
     "lint": {
@@ -45,5 +41,6 @@
       }
     }
   },
-  "tags": []
+  "tags": [],
+  "implicitDependencies": ["api"]
 }

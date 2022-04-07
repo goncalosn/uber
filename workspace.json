@@ -10,6 +10,7 @@
   "executor": "@jscutlery/semver:version",
   "options": {
     "baseBranch": "master",
-    "tagPrefix": "${projectName}@"
+    "tagPrefix": "${projectName}@",
+    "command": "git push --tags"
   }
 }
