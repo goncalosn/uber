@@ -3,17 +3,6 @@
   "sourceRoot": "packages/interfaces/src",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/interfaces",
-        "tsConfig": "packages/interfaces/tsconfig.lib.json",
-        "packageJson": "packages/interfaces/package.json",
-        "main": "packages/interfaces/src/index.ts",
-        "assets": ["packages/interfaces/*.md"]
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

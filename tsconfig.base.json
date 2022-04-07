@@ -17,7 +17,8 @@
     "paths": {
       "@uber/components": ["packages/components/src/index.ts"],
       "@uber/interfaces": ["packages/interfaces/src/index.ts"]
-    }
+    },
+    "jsx": "react-jsx"
   },
   "exclude": ["node_modules", "tmp"]
 }
