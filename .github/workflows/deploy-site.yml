@@ -15,15 +15,20 @@ jobs:
     runs-on: ubuntu-latest
     if: (github.event.workflow_run.conclusion == 'success') && (github.event_name != 'pull_request')
     steps:
-    - name: Cache
-      uses: actions/cache@v2
-      with:
-        path: node_modules
-        key: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
-        restore-keys: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+    - name: Cache pnpm modules
+      uses: actions/cache@v2
+      with:
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-
+    - uses: pnpm/action-setup@v2.2.1
+      with:
+        version: 6.0.2
+        run_install: true
     - uses: amondnet/vercel-action@v20
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -36,15 +41,20 @@ jobs:
     runs-on: ubuntu-latest
     if: (github.event.workflow_run.conclusion == 'success') && (github.event_name == 'pull_request' || github.ref == 'refs/heads/master')
     steps:
-    - name: Cache
-      uses: actions/cache@v2
-      with:
-        path: node_modules
-        key: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
-        restore-keys: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+    - name: Cache pnpm modules
+      uses: actions/cache@v2
+      with:
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-
+    - uses: pnpm/action-setup@v2.2.1
+      with:
+        version: 6.0.2
+        run_install: true
     - uses: amondnet/vercel-action@v20
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -57,12 +67,17 @@ jobs:
     runs-on: ubuntu-latest
     if: (github.event.workflow_run.conclusion == 'success') && (github.ref == 'refs/heads/master')
     steps:
-    - name: Cache
+    - name: Cache pnpm modules
       uses: actions/cache@v2
       with:
-        path: node_modules
-        key: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
-        restore-keys: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-
+    - uses: pnpm/action-setup@v2.2.1
+      with:
+        version: 6.0.2
+        run_install: true
     - uses: amondnet/vercel-action@v20
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
