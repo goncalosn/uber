@@ -24,9 +24,9 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-
-      - uses: pnpm/action-setup@v2.2.1
+      - uses: actions/setup-node@v1
         with:
-          version: 6.0.2
-          run_install: true
-      - run: pnpm nx --help
+          node-version: ${{ matrix.node-version }}
+      - run: curl -fsSL https://get.pnpm.io/install.sh | PNPM_VERSION=7.0.0-rc.6 sh -
+      - run: nnpm install
       - run: pnpm nx affected:build
