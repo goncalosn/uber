@@ -1,0 +1,69 @@
+name: Deploy Site
+on:
+  push:
+    paths:
+    - 'packages/site/**'
+  pull_request:
+  workflow_run:
+    workflows: [Build]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    if: (github.event.workflow_run.conclusion == 'success') && (github.event_name != 'pull_request')
+    steps:
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+    - uses: actions/checkout@v2
+    - uses: amondnet/vercel-action@v20
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        vercel-org-id: ${{ secrets.ORG_ID}}
+        vercel-project-id: ${{ secrets.PROJECT_ID}}
+        alias-domains: dev.uber-goncalosn.vercel.app
+        working-directory: ./dist/packages/site
+  staging:
+    runs-on: ubuntu-latest
+    if: (github.event.workflow_run.conclusion == 'success') && (github.event_name == 'pull_request' || github.ref == 'refs/heads/master')
+    steps:
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+    - uses: actions/checkout@v2
+    - uses: amondnet/vercel-action@v20
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        vercel-org-id: ${{ secrets.ORG_ID}}
+        vercel-project-id: ${{ secrets.PROJECT_ID}}
+        alias-domains: staging.uber-goncalosn.vercel.app
+        working-directory: ./dist/packages/site
+  prod:
+    runs-on: ubuntu-latest
+    if: (github.event.workflow_run.conclusion == 'success') && (github.ref == 'refs/heads/master')
+    steps:
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+    - uses: amondnet/vercel-action@v20
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        vercel-org-id: ${{ secrets.ORG_ID}}
+        vercel-project-id: ${{ secrets.PROJECT_ID}}
+        alias-domains: uber-goncalosn.vercel.app
+        working-directory: ./dist/packages/site

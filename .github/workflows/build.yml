@@ -1,0 +1,43 @@
+name: Build
+on:
+  push:
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v2
+      - name: Cache node modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: cache-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+      - uses: actions/setup-node@v1
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: pnpm install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --lockfile-only
+      - run: pnpm nx affected --target=test
+
+      # - uses: actions/checkout@v2
+      #   name: Checkout [${{github.ref}}]
+      #   with:
+      #     fetch-depth: 0
+      # - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      #   uses: nrwl/nx-set-shas@v2
+      # - name: Use Node.js ${{ matrix.node-version }}
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: ${{ matrix.node-version }}
+      #     cache: 'pnpm'
+      # - run: pnpm install
+      # - run: pnpm nx affected --target=test
