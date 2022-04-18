@@ -1,7 +1,5 @@
 name: Test
 on:
-  push:
-  pull_request:
   workflow_run:
     workflows: [Build]
     types:
@@ -16,8 +14,12 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
+        with:
+          main-branch-name: 'master'
       - name: Cache
         uses: actions/cache@v2
         with:
