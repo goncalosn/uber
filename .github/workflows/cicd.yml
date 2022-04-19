@@ -1,0 +1,41 @@
+name: CI/CD
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: goncalosn/uber/.github/workflows/build.yml@master
+  test:
+    needs: build
+    if: ${{ always() && !cancelled() && needs.build.result == 'success' }}
+    uses: goncalosn/uber/.github/workflows/test.yml@master
+      # JOB to run change detection
+  changes:
+    needs: test
+    runs-on: ubuntu-latest
+    if: ${{ always() && !cancelled() && needs.test.result == 'success' }}
+    # Set job outputs to values from filter step
+    outputs:
+      api: ${{ steps.filter.outputs.api }}
+      site: ${{ steps.filter.outputs.site }}
+    steps:
+    # For pull requests it's not necessary to checkout the code
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          api:
+            - 'api/**'
+          site:
+            - 'site/**'
+  deploy-site:
+    needs: changes
+    if: ${{ needs.changes.outputs.site == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: goncalosn/uber/.github/workflows/deploy-site.yml@master
+        # secrets:
+        #   vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        #   github-token: ${{ secrets.GITHUB_TOKEN }}
+        #   vercel-org-id: ${{ secrets.ORG_ID}}
+        #   vercel-project-id: ${{ secrets.PROJECT_ID}}

@@ -1,23 +1,27 @@
 name: Deploy Site
 on:
-  push:
-    paths:
-    - 'packages/site/**'
-  pull_request:
-  workflow_run:
-    workflows: [Test]
-    types:
-      - completed
-  workflow_dispatch:
+  workflow_call:
+    # secrets:
+    #   vercel-token: ${{ secrets.VERCEL_TOKEN }}
+    #   github-token: ${{ secrets.GITHUB_TOKEN }}
+    #   vercel-org-id: ${{ secrets.ORG_ID}}
+    #   vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
 
 jobs:
   dev:
     runs-on: ubuntu-latest
-    if: (github.event.workflow_run.conclusion == 'success') && (github.event_name != 'pull_request')
+    if: github.event_name != 'pull_request'
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          site:
+            - 'packages/site/**'
+    - if: steps.changes.outputs.site == 'true'
     - name: Cache pnpm modules
       uses: actions/cache@v2
       with:
@@ -35,16 +39,23 @@ jobs:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         vercel-org-id: ${{ secrets.ORG_ID}}
-        vercel-project-id: ${{ secrets.PROJECT_ID}}
+        vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
         alias-domains: dev.uber-goncalosn.vercel.app
         working-directory: ./dist/packages/site
   staging:
     runs-on: ubuntu-latest
-    if: (github.event.workflow_run.conclusion == 'success') && (github.event_name == 'pull_request' || github.ref == 'refs/heads/master')
+    if: (github.event_name == 'pull_request' || github.ref == 'refs/heads/master')  && ${{ success() }}
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          site:
+            - 'packages/site/**'
+    - if: steps.changes.outputs.site == 'true'
     - name: Cache pnpm modules
       uses: actions/cache@v2
       with:
@@ -62,13 +73,20 @@ jobs:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         vercel-org-id: ${{ secrets.ORG_ID}}
-        vercel-project-id: ${{ secrets.PROJECT_ID}}
+        vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
         alias-domains: staging.uber-goncalosn.vercel.app
         working-directory: ./dist/packages/site
   prod:
     runs-on: ubuntu-latest
-    if: (github.event.workflow_run.conclusion == 'success') && (github.ref == 'refs/heads/master')
+    if: (github.ref == 'refs/heads/master') && ${{ success() }}
     steps:
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          site:
+            - 'packages/site/**'
+    - if: steps.changes.outputs.site == 'true'
     - name: Cache pnpm modules
       uses: actions/cache@v2
       with:
@@ -86,6 +104,6 @@ jobs:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         vercel-org-id: ${{ secrets.ORG_ID}}
-        vercel-project-id: ${{ secrets.PROJECT_ID}}
+        vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
         alias-domains: uber-goncalosn.vercel.app
         working-directory: ./dist/packages/site
