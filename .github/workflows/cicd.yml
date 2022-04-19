@@ -6,8 +6,8 @@ jobs:
   build:
     uses: goncalosn/uber/.github/workflows/build.yml@master
   test:
-    # needs: build
-    # if: ${{ always() && !cancelled() && needs.build.result == 'success' }}
+    needs: build
+    if: ${{ always() && !cancelled() && needs.build.result == 'success' }}
     uses: goncalosn/uber/.github/workflows/test.yml@master
   # JOB to run change detection
   changes:
@@ -31,8 +31,8 @@ jobs:
             site:
               - 'packages/site/**'
   deploy-site:
-    # needs: changes
-    # if: ${{ needs.changes.outputs.site == 'true' }}
+    needs: changes
+    if: ${{ needs.changes.outputs.site == 'true' }}
     uses: goncalosn/uber/.github/workflows/deploy-site.yml@master
     secrets:
       vercel-token: ${{ secrets.VERCEL_TOKEN }}
