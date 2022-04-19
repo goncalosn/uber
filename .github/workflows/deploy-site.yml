@@ -12,98 +12,98 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - uses: dorny/paths-filter@v2
-      id: changes
-      with:
-        filters: |
-          site:
-            - 'packages/site/**'
-    - name: Cache pnpm modules
-      if: steps.changes.outputs.site == 'true'
-      uses: actions/cache@v2
-      with:
-        path: ~/.pnpm-store
-        key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-
-    - uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i -g pnpm@6.32.6
-    - run: pnpm install
-    - uses: amondnet/vercel-action@v20
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        vercel-org-id: ${{ secrets.ORG_ID}}
-        vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-        alias-domains: dev.uber-goncalosn.vercel.app
-        working-directory: ./dist/packages/site
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            site:
+              - 'packages/site/**'
+      - name: Cache pnpm modules
+        if: steps.changes.outputs.site == 'true'
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i -g pnpm@6.32.6
+      - run: pnpm install
+      - uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+          alias-domains: dev.uber-goncalosn.vercel.app
+          working-directory: ./dist/packages/site
   staging:
     runs-on: ubuntu-latest
     if: (github.event_name == 'pull_request' || github.ref == 'refs/heads/master')  && ${{ success() }}
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - uses: dorny/paths-filter@v2
-      id: changes
-      with:
-        filters: |
-          site:
-            - 'packages/site/**'
-    - name: Cache pnpm modules
-      if: steps.changes.outputs.site == 'true'
-      uses: actions/cache@v2
-      with:
-        path: ~/.pnpm-store
-        key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-
-    - uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i -g pnpm@6.32.6
-    - run: pnpm install
-    - uses: amondnet/vercel-action@v20
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        vercel-org-id: ${{ secrets.ORG_ID}}
-        vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-        alias-domains: staging.uber-goncalosn.vercel.app
-        working-directory: ./dist/packages/site
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            site:
+              - 'packages/site/**'
+      - name: Cache pnpm modules
+        if: steps.changes.outputs.site == 'true'
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i -g pnpm@6.32.6
+      - run: pnpm install
+      - uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+          alias-domains: staging.uber-goncalosn.vercel.app
+          working-directory: ./dist/packages/site
   prod:
     runs-on: ubuntu-latest
     if: (github.ref == 'refs/heads/master') && ${{ success() }}
     steps:
-    - uses: dorny/paths-filter@v2
-      id: changes
-      with:
-        filters: |
-          site:
-            - 'packages/site/**'
-    - name: Cache pnpm modules
-      if: steps.changes.outputs.site == 'true'
-      uses: actions/cache@v2
-      with:
-        path: ~/.pnpm-store
-        key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-
-    - uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i -g pnpm@6.32.6
-    - run: pnpm install
-    - uses: amondnet/vercel-action@v20
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        vercel-org-id: ${{ secrets.ORG_ID}}
-        vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-        alias-domains: uber-goncalosn.vercel.app
-        working-directory: ./dist/packages/site
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            site:
+              - 'packages/site/**'
+      - name: Cache pnpm modules
+        if: steps.changes.outputs.site == 'true'
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i -g pnpm@6.32.6
+      - run: pnpm install
+      - uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+          alias-domains: uber-goncalosn.vercel.app
+          working-directory: ./dist/packages/site
