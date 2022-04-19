@@ -31,11 +31,9 @@ jobs:
   deploy-site:
     needs: changes
     if: ${{ needs.changes.outputs.site == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: goncalosn/uber/.github/workflows/deploy-site.yml@master
-        # secrets:
-        #   vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        #   github-token: ${{ secrets.GITHUB_TOKEN }}
-        #   vercel-org-id: ${{ secrets.ORG_ID}}
-        #   vercel-project-id: ${{ secrets.PROJECT_ID}}
+    uses: goncalosn/uber/.github/workflows/deploy-site.yml@master
+    secrets:
+      vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      vercel-org-id: ${{ secrets.ORG_ID}}
+      vercel-site-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}

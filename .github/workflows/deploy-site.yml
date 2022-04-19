@@ -1,11 +1,11 @@
 name: Deploy Site
 on:
   workflow_call:
-    # secrets:
-    #   vercel-token: ${{ secrets.VERCEL_TOKEN }}
-    #   github-token: ${{ secrets.GITHUB_TOKEN }}
-    #   vercel-org-id: ${{ secrets.ORG_ID}}
-    #   vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+    secrets:
+      vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      vercel-org-id: ${{ secrets.ORG_ID}}
+      vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
 
 jobs:
   dev:
