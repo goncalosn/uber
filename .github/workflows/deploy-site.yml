@@ -21,8 +21,8 @@ jobs:
         filters: |
           site:
             - 'packages/site/**'
-    - if: steps.changes.outputs.site == 'true'
     - name: Cache pnpm modules
+      if: steps.changes.outputs.site == 'true'
       uses: actions/cache@v2
       with:
         path: ~/.pnpm-store
@@ -55,8 +55,8 @@ jobs:
         filters: |
           site:
             - 'packages/site/**'
-    - if: steps.changes.outputs.site == 'true'
     - name: Cache pnpm modules
+      if: steps.changes.outputs.site == 'true'
       uses: actions/cache@v2
       with:
         path: ~/.pnpm-store
@@ -86,8 +86,8 @@ jobs:
         filters: |
           site:
             - 'packages/site/**'
-    - if: steps.changes.outputs.site == 'true'
     - name: Cache pnpm modules
+      if: steps.changes.outputs.site == 'true'
       uses: actions/cache@v2
       with:
         path: ~/.pnpm-store

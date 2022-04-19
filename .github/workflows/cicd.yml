@@ -19,17 +19,17 @@ jobs:
       api: ${{ steps.filter.outputs.api }}
       site: ${{ steps.filter.outputs.site }}
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - uses: dorny/paths-filter@v2
-      id: filter
-      with:
-        filters: |
-          api:
-            - 'packages/api/**'
-          site:
-            - 'packages/site/**'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            api:
+              - 'packages/api/**'
+            site:
+              - 'packages/site/**'
   deploy-site:
     # needs: changes
     # if: ${{ needs.changes.outputs.site == 'true' }}
