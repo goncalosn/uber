@@ -13,7 +13,6 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <div>
           <p>Hello Vite + React!</p>
-          <br />
           <HelloWorld />
         </div>
         <p>
