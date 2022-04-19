@@ -6,10 +6,10 @@ jobs:
   build:
     uses: goncalosn/uber/.github/workflows/build.yml@master
   test:
-    needs: build
-    if: ${{ always() && !cancelled() && needs.build.result == 'success' }}
+    # needs: build
+    # if: ${{ always() && !cancelled() && needs.build.result == 'success' }}
     uses: goncalosn/uber/.github/workflows/test.yml@master
-      # JOB to run change detection
+  # JOB to run change detection
   changes:
     needs: test
     runs-on: ubuntu-latest
@@ -19,18 +19,20 @@ jobs:
       api: ${{ steps.filter.outputs.api }}
       site: ${{ steps.filter.outputs.site }}
     steps:
-    # For pull requests it's not necessary to checkout the code
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - uses: dorny/paths-filter@v2
       id: filter
       with:
         filters: |
           api:
-            - 'api/**'
+            - 'packages/api/**'
           site:
-            - 'site/**'
+            - 'packages/site/**'
   deploy-site:
-    needs: changes
-    if: ${{ needs.changes.outputs.site == 'true' }}
+    # needs: changes
+    # if: ${{ needs.changes.outputs.site == 'true' }}
     uses: goncalosn/uber/.github/workflows/deploy-site.yml@master
     secrets:
       vercel-token: ${{ secrets.VERCEL_TOKEN }}
