@@ -37,5 +37,5 @@ jobs:
     secrets:
       vercel-token: ${{ secrets.VERCEL_TOKEN }}
       github-token: ${{ secrets.GITHUB_TOKEN }}
-      vercel-org-id: ${{ secrets.ORG_ID}}
+      vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
       vercel-site-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}

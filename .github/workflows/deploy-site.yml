@@ -8,7 +8,7 @@ on:
         required: true
       vercel-org-id:
         required: true
-      vercel-project-id:
+      vercel-site-project-id:
         required: true
 
 jobs:
