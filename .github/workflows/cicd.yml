@@ -5,11 +5,11 @@ on:
 
 jobs:
   build:
-    uses: goncalosn/uber/.github/workflows/build.yml@${{ github.head_ref || github.ref_name }}
+    uses: ./.github/workflows/build.yml
   test:
     needs: build
     if: ${{ always() && !cancelled() && needs.build.result == 'success' }}
-    uses: goncalosn/uber/.github/workflows/test.yml@${{ github.head_ref || github.ref_name }}
+    uses: ./.github/workflows/test.yml
   # JOB to run change detection
   changes:
     needs: test
@@ -35,7 +35,7 @@ jobs:
   deploy-site:
     needs: changes
     if: ${{ needs.changes.outputs.site == 'true' }}
-    uses: goncalosn/uber/.github/workflows/deploy-site.yml@${{ github.head_ref || github.ref_name }}
+    uses: ./.github/workflows/deploy-site.yml
     secrets:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
