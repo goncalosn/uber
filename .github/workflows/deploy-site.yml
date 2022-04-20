@@ -43,10 +43,10 @@ jobs:
       - run: pnpm install
       - uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+          vercel-token: ${{ secrets.vercel-token }}
+          github-token: ${{ secrets.github-token }}
+          vercel-org-id: ${{ secrets.vercel-org-id}}
+          vercel-project-id: ${{ secrets.vercel-site-project-id}}
           alias-domains: dev.uber-goncalosn.vercel.app
           working-directory: ./dist/packages/site
   staging:
@@ -80,10 +80,10 @@ jobs:
       - run: pnpm install
       - uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+          vercel-token: ${{ secrets.vercel-token }}
+          github-token: ${{ secrets.github-token }}
+          vercel-org-id: ${{ secrets.vercel-org-id}}
+          vercel-project-id: ${{ secrets.vercel-site-project-id}}
           alias-domains: staging.uber-goncalosn.vercel.app
           working-directory: ./dist/packages/site
   prod:
@@ -114,9 +114,9 @@ jobs:
       - run: pnpm install
       - uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+          vercel-token: ${{ secrets.vercel-token }}
+          github-token: ${{ secrets.github-token }}
+          vercel-org-id: ${{ secrets.vercel-org-id}}
+          vercel-project-id: ${{ secrets.vercel-site-project-id}}
           alias-domains: uber-goncalosn.vercel.app
           working-directory: ./dist/packages/site
