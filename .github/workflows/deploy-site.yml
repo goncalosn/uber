@@ -14,6 +14,9 @@ on:
 jobs:
   dev:
     runs-on: ubuntu-latest
+    environment:
+      name: Development
+      url: https://dev.uber-goncalosn.vercel.app
     if: github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@v2
@@ -48,7 +51,10 @@ jobs:
           working-directory: ./dist/packages/site
   staging:
     runs-on: ubuntu-latest
-    if: (github.event_name == 'pull_request' || github.ref == 'refs/heads/master')  && ${{ success() }}
+    environment:
+      name: Staging
+      url: https://staging.uber-goncalosn.vercel.app
+    if: (github.event_name == 'pull_request' && success()) || github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
         with:
@@ -82,7 +88,10 @@ jobs:
           working-directory: ./dist/packages/site
   prod:
     runs-on: ubuntu-latest
-    if: (github.ref == 'refs/heads/master') && ${{ success() }}
+    environment:
+      name: Production
+      url: https://uber-goncalosn.vercel.app
+    if: github.ref == 'refs/heads/master' && success()
     steps:
       - uses: dorny/paths-filter@v2
         id: changes
