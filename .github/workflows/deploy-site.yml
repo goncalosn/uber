@@ -2,6 +2,8 @@ name: Deploy Site
 on:
   workflow_call:
     secrets:
+      GITHUB_TOKEN:
+        required: true
       VERCEL_TOKEN:
         required: true
       VERCEL_ORG_ID:
