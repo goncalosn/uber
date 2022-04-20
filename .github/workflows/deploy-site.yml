@@ -2,22 +2,20 @@ name: Deploy Site
 on:
   workflow_call:
     secrets:
-      vercel-token:
+      VERCEL_TOKEN:
         required: true
-      github-token:
+      VERCEL_ORG_ID:
         required: true
-      vercel-org-id:
-        required: true
-      vercel-site-project-id:
+      VERCEL_SITE_PROJECT_ID:
         required: true
 
 jobs:
   dev:
     runs-on: ubuntu-latest
     environment:
-      name: Development
+      name: development
       url: https://dev.uber-goncalosn.vercel.app
-    if: github.event_name != 'pull_request'
+    if: ${{ github.event_name != 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -43,18 +41,18 @@ jobs:
       - run: pnpm install
       - uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.vercel-token }}
-          github-token: ${{ secrets.github-token }}
-          vercel-org-id: ${{ secrets.vercel-org-id}}
-          vercel-project-id: ${{ secrets.vercel-site-project-id}}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
           alias-domains: dev.uber-goncalosn.vercel.app
           working-directory: ./dist/packages/site
   staging:
     runs-on: ubuntu-latest
     environment:
-      name: Staging
+      name: staging
       url: https://staging.uber-goncalosn.vercel.app
-    if: (github.event_name == 'pull_request' && success()) || github.ref == 'refs/heads/master'
+    if: ${{ (github.event_name == 'pull_request' && success()) || github.ref == 'refs/heads/master' }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -80,18 +78,18 @@ jobs:
       - run: pnpm install
       - uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.vercel-token }}
-          github-token: ${{ secrets.github-token }}
-          vercel-org-id: ${{ secrets.vercel-org-id}}
-          vercel-project-id: ${{ secrets.vercel-site-project-id}}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
           alias-domains: staging.uber-goncalosn.vercel.app
           working-directory: ./dist/packages/site
   prod:
     runs-on: ubuntu-latest
     environment:
-      name: Production
+      name: production
       url: https://uber-goncalosn.vercel.app
-    if: github.ref == 'refs/heads/master' && success()
+    if: ${{ github.ref == 'refs/heads/master' && success() }}
     steps:
       - uses: dorny/paths-filter@v2
         id: changes
@@ -114,9 +112,10 @@ jobs:
       - run: pnpm install
       - uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.vercel-token }}
-          github-token: ${{ secrets.github-token }}
-          vercel-org-id: ${{ secrets.vercel-org-id}}
-          vercel-project-id: ${{ secrets.vercel-site-project-id}}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-args: '--prod'
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
           alias-domains: uber-goncalosn.vercel.app
           working-directory: ./dist/packages/site
