@@ -39,7 +39,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-          alias-domains: https://dev.uber-goncalosn.vercel.app
+          alias-domains: dev.uber-goncalosn
           working-directory: ./dist/packages/site
   staging:
     runs-on: ubuntu-latest
