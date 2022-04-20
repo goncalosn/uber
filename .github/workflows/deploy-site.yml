@@ -12,9 +12,6 @@ on:
 jobs:
   dev:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16]
     environment:
       name: development
       url: https://dev.uber-goncalosn.vercel.app
@@ -42,7 +39,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-          alias-domains: dev.uber-goncalosn.vercel.app
+          alias-domains: https://dev.uber-goncalosn.vercel.app
           working-directory: ./dist/packages/site
   staging:
     runs-on: ubuntu-latest
@@ -73,7 +70,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-          alias-domains: staging.uber-goncalosn.vercel.app
+          alias-domains: https://staging.uber-goncalosn.vercel.app
           working-directory: ./dist/packages/site
   prod:
     runs-on: ubuntu-latest
@@ -102,5 +99,5 @@ jobs:
           vercel-args: '--prod'
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-          alias-domains: uber-goncalosn.vercel.app
+          alias-domains: https://uber-goncalosn.vercel.app
           working-directory: ./dist/packages/site
