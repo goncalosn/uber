@@ -40,3 +40,16 @@ jobs:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
       VERCEL_SITE_PROJECT_ID: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+  # e2e:
+  #   runs-on: ubuntu-latest
+  #   needs: deploy
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Run Lighthouse on urls and validate with lighthouserc
+  #       uses: treosh/lighthouse-ci-action@v7
+  #       with:
+  #         urls: |
+  #           ${{ needs.deploy.outputs.preview-url }}
+  #           ${{ needs.deploy.outputs.preview-url }}/some-other-path
+  #         budgetPath: ./budget.json
+  #         runs: 3

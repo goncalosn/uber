@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: development
-      url: https://dev.uber-goncalosn.vercel.app
+      url: ${{ steps.vercel-deployment.outputs.preview-url }}
     if: ${{ github.event_name != 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
@@ -34,18 +34,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-dist-${{ github.head_ref || github.ref_name }}
       - uses: amondnet/vercel-action@v20
+        id: vercel-deployment
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: '--dev'
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
           working-directory: ./dist/packages/site
+    outputs:
+      preview-url: ${{ steps.vercel-deployment.outputs.preview-url }}
   staging:
     runs-on: ubuntu-latest
     environment:
       name: staging
-      url: https://staging.uber-goncalosn.vercel.app
+      url: ${{ steps.vercel-deployment.outputs.preview-url }}
     if: ${{ (github.event_name == 'pull_request' && success()) || github.ref == 'refs/heads/master' }}
     steps:
       - uses: actions/checkout@v2
@@ -65,12 +67,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-dist-${{ github.head_ref || github.ref_name }}
       - uses: amondnet/vercel-action@v20
+        id: vercel-deployment
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
           working-directory: ./dist/packages/site
+    outputs:
+      preview-url: ${{ steps.vercel-deployment.outputs.preview-url }}
   prod:
     runs-on: ubuntu-latest
     environment:
