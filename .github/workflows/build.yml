@@ -33,6 +33,6 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./dist
-          key: ${{ runner.os }}-dist-${{ github.ref_name }}
+          key: ${{ runner.os }}-dist-${{ github.run_id }}
           restore-keys: |
-            ${{ runner.os }}-dist-${{ github.ref_name }}
+            ${{ runner.os }}-dist-${{ github.run_id }}
