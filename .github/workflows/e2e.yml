@@ -4,8 +4,9 @@ on:
     secrets:
       BASE_URL:
         required: true
+
 jobs:
-  unit:
+  e2e:
     runs-on: ubuntu-latest
     strategy:
       matrix:
