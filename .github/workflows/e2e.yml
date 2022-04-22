@@ -1,9 +1,12 @@
-name: Test
+name: Site e2e
 on:
   workflow_call:
+    secrets:
+      BASE_URL:
+        required: true
 
 jobs:
-  unit:
+  e2e:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -12,10 +15,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v2
-        with:
-          main-branch-name: 'master'
       - name: Cache pnpm modules
         uses: actions/cache@v2
         with:
@@ -28,4 +27,4 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm i -g pnpm@6.32.6
       - run: pnpm install
-      - run: pnpm nx affected --target=test
+      - run: pnpm nx run site-e2e:e2e:cicd --baseUrl=${{ secrets.BASE_URL }}

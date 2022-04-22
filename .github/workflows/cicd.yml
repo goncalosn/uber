@@ -1,19 +1,20 @@
 name: CI/CD
 on:
-  workflow_dispatch:
+  push:
+  pull_request:
 
 jobs:
   build:
-    uses: goncalosn/uber/.github/workflows/build.yml@master
+    uses: ./.github/workflows/build.yml
   test:
     needs: build
-    if: ${{ always() && !cancelled() && needs.build.result == 'success' }}
-    uses: goncalosn/uber/.github/workflows/test.yml@master
+    if: ${{ success() && !cancelled() && needs.build.result == 'success' }}
+    uses: ./.github/workflows/test.yml
   # JOB to run change detection
   changes:
     needs: test
     runs-on: ubuntu-latest
-    if: ${{ always() && !cancelled() && needs.test.result == 'success' }}
+    if: ${{ success() && !cancelled() && needs.test.result == 'success' }}
     # Set job outputs to values from filter step
     outputs:
       api: ${{ steps.filter.outputs.api }}
@@ -25,6 +26,7 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
+          base: ${{ github.ref }}
           filters: |
             api:
               - 'packages/api/**'
@@ -32,10 +34,15 @@ jobs:
               - 'packages/site/**'
   deploy-site:
     needs: changes
-    if: ${{ needs.changes.outputs.site == 'true' }}
-    uses: goncalosn/uber/.github/workflows/deploy-site.yml@master
+    if: ${{ success() && !cancelled() && needs.changes.outputs.site == 'true' }}
+    uses: ./.github/workflows/deploy-site.yml
     secrets:
-      vercel-token: ${{ secrets.VERCEL_TOKEN }}
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-      vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-      vercel-site-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
+      VERCEL_SITE_PROJECT_ID: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+  e2e:
+    needs: deploy-site
+    if: ${{ success() && !cancelled() && github.event_name == 'pull_request' }}
+    uses: ./.github/workflows/e2e.yml
+    secrets:
+      BASE_URL: ${{ needs.deploy-site.outputs.preview-url }}
