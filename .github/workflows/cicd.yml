@@ -45,4 +45,4 @@ jobs:
     if: ${{ success() && !cancelled() && github.event_name == 'pull_request' }}
     uses: ./.github/workflows/e2e.yml
     secrets:
-      VERCEL_TOKEN: ${{ needs.deploy-site.outputs.preview-url }}
+      BASE_URL: ${{ needs.deploy-site.outputs.preview-url }}
