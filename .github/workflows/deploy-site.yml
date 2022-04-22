@@ -86,6 +86,9 @@ jobs:
       url: https://uber-goncalosn.vercel.app
     if: ${{ github.ref == 'refs/heads/master' && success() }}
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: dorny/paths-filter@v2
         id: changes
         with:
