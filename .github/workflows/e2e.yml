@@ -1,0 +1,29 @@
+name: Site e2e
+on:
+  workflow_call:
+    secrets:
+      BASE_URL:
+        required: true
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i -g pnpm@6.32.6
+      - run: pnpm install
+      - run: pnpm nx run site-e2e:e2e:cicd --baseUrl=${{ secrets.BASE_URL }}

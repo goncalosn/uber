@@ -4,14 +4,14 @@
   "projectType": "application",
   "targets": {
     "e2e": {
-      "executor": "@nrwl/cypress:cypress",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "cypressConfig": "packages/site-e2e/cypress.json",
-        "devServerTarget": "site:serve"
+        "command": "pnpx cypress run --config-file=cypress.json --config baseUrl=http://localhost:3000",
+        "cwd": "packages/site-e2e"
       },
       "configurations": {
-        "production": {
-          "devServerTarget": "site:serve:production"
+        "cicd": {
+          "command": "pnpx cypress run --config-file=cypress.json --config baseUrl={args.baseUrl}"
         }
       }
     },
