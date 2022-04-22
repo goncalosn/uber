@@ -34,9 +34,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./dist
-          key: ${{ runner.os }}-dist-${{ github.head_ref || github.ref_name }}
+          key: ${{ runner.os }}-dist-${{ github.ref_name }}
           restore-keys: |
-            ${{ runner.os }}-dist-${{ github.head_ref || github.ref_name }}
+            ${{ runner.os }}-dist-${{ github.ref_name }}
       - uses: amondnet/vercel-action@v20
         id: vercel-deployment
         with:
@@ -65,9 +65,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./dist
-          key: ${{ runner.os }}-dist-${{ github.head_ref || github.ref_name }}
+          key: ${{ runner.os }}-dist-${{ github.ref_name }}
           restore-keys: |
-            ${{ runner.os }}-dist-${{ github.head_ref || github.ref_name }}
+            ${{ runner.os }}-dist-${{ github.ref_name }}
       - uses: amondnet/vercel-action@v20
         id: vercel-deployment
         with:
@@ -96,9 +96,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./dist
-          key: ${{ runner.os }}-dist-${{ github.head_ref || github.ref_name }}
+          key: ${{ runner.os }}-dist-${{ github.ref_name }}
           restore-keys: |
-            ${{ runner.os }}-dist-${{ github.head_ref || github.ref_name }}
+            ${{ runner.os }}-dist-${{ github.ref_name }}
       - uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
