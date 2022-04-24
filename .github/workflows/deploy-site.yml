@@ -66,10 +66,28 @@ jobs:
 
   e2e:
     needs: staging
+    runs-on: ubuntu-latest
     if: ${{ needs.staging.result == 'success' && github.event_name == 'pull_request' }}
-    uses: ./.github/workflows/e2e.yml
-    secrets:
-      BASE_URL: ${{ needs.staging.outputs.preview-url }}
+    strategy:
+      matrix:
+        node-version: [16]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i -g pnpm@6.32.6
+      - run: pnpm install
+      - run: pnpm nx run site-e2e:e2e:cicd --baseUrl=${{ needs.staging.outputs.preview-url }}
 
   prod:
     runs-on: ubuntu-latest

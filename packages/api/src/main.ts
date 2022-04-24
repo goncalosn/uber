@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/api', (req, res) => {
-  res.json({ message: 'Welcome to api2!' });
+  res.json({ message: 'Welcome to api!' });
 });
 
 app.get('/api/health', (req, res) => {
