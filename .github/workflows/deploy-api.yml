@@ -40,3 +40,66 @@ jobs:
         run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
       - name: Heroku release image
         run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+
+  staging:
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+    if: ${{ github.event_name == 'pull_request' ||  github.ref == 'refs/heads/master' }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache build
+        uses: actions/cache@v2
+        with:
+          path: ./dist
+          key: ${{ runner.os }}-dist-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-dist-${{ github.run_id }}
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ''
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          justlogin: true
+      - name: Heroku container login
+        run: heroku container:login
+      - name: Docker build
+        run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web -f ./packages/api/Dockerfile .
+      - name: Heroku push image
+        run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+      - name: Heroku release image
+        run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+
+  prod:
+    runs-on: ubuntu-latest
+    needs: staging
+    environment:
+      name: production
+    if: ${{ github.ref == 'refs/heads/master' && success() }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache build
+        uses: actions/cache@v2
+        with:
+          path: ./dist
+          key: ${{ runner.os }}-dist-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-dist-${{ github.run_id }}
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ''
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          justlogin: true
+      - name: Heroku container login
+        run: heroku container:login
+      - name: Docker build
+        run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web -f ./packages/api/Dockerfile .
+      - name: Heroku push image
+        run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+      - name: Heroku release image
+        run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
