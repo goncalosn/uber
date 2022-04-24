@@ -1,0 +1,36 @@
+name: Deploy Site
+on:
+  workflow_call:
+    secrets:
+      HEROKU_API_KEY:
+        required: true
+      HEROKU_APP_NAME:
+        required: true
+      HEROKU_EMAIL:
+        required: true
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: ${{ steps.vercel-deployment.outputs.preview-url }}
+    if: ${{ github.ref != 'refs/heads/master' &&  github.event_name != 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache build
+        uses: actions/cache@v2
+        with:
+          path: ./dist
+          key: ${{ runner.os }}-dist-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-dist-${{ github.run_id }}
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          usedocker: true
+          appdir: packages/api
