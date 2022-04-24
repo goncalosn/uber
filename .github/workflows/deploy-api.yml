@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: development
-      url: ${{ steps.vercel-deployment.outputs.preview-url }}
     if: ${{ github.ref != 'refs/heads/master' &&  github.event_name != 'pull_request' }}
     steps:
       - uses: actions/checkout@v2

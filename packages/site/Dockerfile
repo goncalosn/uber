@@ -1,5 +1,6 @@
 FROM nginx:stable-alpine
-COPY dist/packages/site /usr/share/nginx/html
+
+COPY ../../dist/packages/site /usr/share/nginx/html
 
 EXPOSE 80
 
