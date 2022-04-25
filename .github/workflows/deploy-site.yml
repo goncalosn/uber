@@ -74,7 +74,7 @@ jobs:
   e2e:
     needs: staging
     runs-on: ubuntu-latest
-    if: ${{ needs.staging.result == 'success' && github.event_name == 'pull_request' }}
+    if: ${{ needs.staging.result == 'success' }}
     strategy:
       matrix:
         node-version: [16]
@@ -98,11 +98,11 @@ jobs:
 
   prod:
     runs-on: ubuntu-latest
-    needs: staging
+    needs: e2e
     environment:
       name: production
       url: https://uber-goncalosn.herokuapp.com
-    if: ${{ github.ref == 'refs/heads/master' && success() }}
+    if: ${{ github.ref == 'refs/heads/master' && needs.e2e.result == 'success' }}
     steps:
       - uses: actions/checkout@v2
         with:

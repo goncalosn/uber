@@ -75,7 +75,7 @@ jobs:
     needs: staging
     environment:
       name: production
-    if: ${{ github.ref == 'refs/heads/master' && success() }}
+    if: ${{ github.ref == 'refs/heads/master' && needs.staging.result == 'success' }}
     steps:
       - uses: actions/checkout@v2
         with:
