@@ -5,6 +5,8 @@ services:
       dockerfile: packages/site/Dockerfile
     ports:
       - '3000:3000'
+    environment:
+      - PORT=3000
   api:
     build: 
       context: .
