@@ -8,6 +8,6 @@ COPY dist/packages/api .
 # If you are building your code for production
 RUN npm i --only=production
 
-EXPOSE ${PORT}
+EXPOSE ${PORT:-8080}
 
 CMD [ "node", "main.js" ]
