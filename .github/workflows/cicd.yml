@@ -40,9 +40,8 @@ jobs:
     if: ${{ needs.changes.result == 'success' && needs.changes.outputs.site == 'true' }}
     uses: ./.github/workflows/deploy-site.yml
     secrets:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
-      VERCEL_SITE_PROJECT_ID: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL}}
 
   deploy-api:
     needs: changes
@@ -50,5 +49,4 @@ jobs:
     uses: ./.github/workflows/deploy-api.yml
     secrets:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME}}
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL}}

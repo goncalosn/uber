@@ -2,11 +2,9 @@ name: Deploy Site
 on:
   workflow_call:
     secrets:
-      VERCEL_TOKEN:
+      HEROKU_API_KEY:
         required: true
-      VERCEL_ORG_ID:
-        required: true
-      VERCEL_SITE_PROJECT_ID:
+      HEROKU_EMAIL:
         required: true
 
 jobs:
@@ -14,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: development
-      url: ${{ steps.vercel-deployment.outputs.preview-url }}
+      url: https://uber-dev-goncalosn.herokuapp.com
     if: ${{ github.ref != 'refs/heads/master' &&  github.event_name != 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
@@ -27,20 +25,26 @@ jobs:
           key: ${{ runner.os }}-dist-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-dist-${{ github.run_id }}
-      - uses: amondnet/vercel-action@v20
-        id: vercel-deployment
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-          working-directory: ./dist/packages/site
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ''
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          justlogin: true
+      - name: Heroku container login
+        run: heroku container:login
+      - name: Docker build
+        run: docker build -t registry.heroku.com/uber-dev-goncalosn/web -f ./packages/site/Dockerfile .
+      - name: Heroku push image
+        run: docker push registry.heroku.com/uber-dev-goncalosn/web
+      - name: Heroku release image
+        run: heroku container:release web --app uber-dev-goncalosn
 
   staging:
     runs-on: ubuntu-latest
     environment:
       name: staging
-      url: ${{ steps.vercel-deployment.outputs.preview-url }}
+      url: https://uber-staging-goncalosn.herokuapp.com
     if: ${{ github.event_name == 'pull_request' ||  github.ref == 'refs/heads/master' }}
     steps:
       - uses: actions/checkout@v2
@@ -53,17 +57,20 @@ jobs:
           key: ${{ runner.os }}-dist-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-dist-${{ github.run_id }}
-      - uses: amondnet/vercel-action@v20
-        id: vercel-deployment
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-          working-directory: ./dist/packages/site
-    outputs:
-      preview-url: ${{ steps.vercel-deployment.outputs.preview-url }}
-
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ''
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          justlogin: true
+      - name: Heroku container login
+        run: heroku container:login
+      - name: Docker build
+        run: docker build -t registry.heroku.com/uber-staging-goncalosn/web -f ./packages/site/Dockerfile .
+      - name: Heroku push image
+        run: docker push registry.heroku.com/uber-staging-goncalosn/web
+      - name: Heroku release image
+        run: heroku container:release web --app uber-staging-goncalosn
   e2e:
     needs: staging
     runs-on: ubuntu-latest
@@ -87,14 +94,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm i -g pnpm@6.32.6
       - run: pnpm install
-      - run: pnpm nx run site-e2e:e2e:cicd --baseUrl=${{ needs.staging.outputs.preview-url }}
+      - run: pnpm nx run site-e2e:e2e:cicd --baseUrl=https://uber-staging-goncalosn.herokuapp.com
 
   prod:
     runs-on: ubuntu-latest
     needs: staging
     environment:
       name: production
-      url: https://uber-goncalosn.vercel.app
+      url: https://uber-goncalosn.herokuapp.com
     if: ${{ github.ref == 'refs/heads/master' && success() }}
     steps:
       - uses: actions/checkout@v2
@@ -107,11 +114,17 @@ jobs:
           key: ${{ runner.os }}-dist-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-dist-${{ github.run_id }}
-      - uses: amondnet/vercel-action@v20
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: '--prod'
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_SITE_PROJECT_ID}}
-          working-directory: ./dist/packages/site
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ''
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          justlogin: true
+      - name: Heroku container login
+        run: heroku container:login
+      - name: Docker build
+        run: docker build -t registry.heroku.com/uber-goncalosn/web -f ./packages/site/Dockerfile .
+      - name: Heroku push image
+        run: docker push registry.heroku.com/uber-goncalosn/web
+      - name: Heroku release image
+        run: heroku container:release web --app uber-goncalosn

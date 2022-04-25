@@ -4,8 +4,6 @@ on:
     secrets:
       HEROKU_API_KEY:
         required: true
-      HEROKU_APP_NAME:
-        required: true
       HEROKU_EMAIL:
         required: true
 
@@ -35,11 +33,11 @@ jobs:
       - name: Heroku container login
         run: heroku container:login
       - name: Docker build
-        run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web -f ./packages/api/Dockerfile .
+        run: docker build -t registry.heroku.com/uber-api-dev-goncalosn/web -f ./packages/api/Dockerfile .
       - name: Heroku push image
-        run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+        run: docker push registry.heroku.com/uber-api-dev-goncalosn/web
       - name: Heroku release image
-        run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+        run: heroku container:release web --app uber-api-dev-goncalosn
 
   staging:
     runs-on: ubuntu-latest
@@ -66,11 +64,11 @@ jobs:
       - name: Heroku container login
         run: heroku container:login
       - name: Docker build
-        run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web -f ./packages/api/Dockerfile .
+        run: docker build -t registry.heroku.com/uber-api-staging-goncalosn/web -f ./packages/api/Dockerfile .
       - name: Heroku push image
-        run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+        run: docker push registry.heroku.com/uber-api-staging-goncalosn/web
       - name: Heroku release image
-        run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+        run: heroku container:release web --app uber-api-staging-goncalosn
 
   prod:
     runs-on: ubuntu-latest
@@ -98,8 +96,8 @@ jobs:
       - name: Heroku container login
         run: heroku container:login
       - name: Docker build
-        run: docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web -f ./packages/api/Dockerfile .
+        run: docker build -t registry.heroku.com/uber-api-goncalosn/web -f ./packages/api/Dockerfile .
       - name: Heroku push image
-        run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+        run: docker push registry.heroku.com/uber-api-goncalosn/web
       - name: Heroku release image
-        run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+        run: heroku container:release web --app uber-api-goncalosn
