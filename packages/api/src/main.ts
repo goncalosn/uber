@@ -1,20 +1,33 @@
-import * as express from 'express';
+import cookieParser = require('cookie-parser');
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+
+import logger from './utils/logger';
+import { PORT, CORS_ORIGIN } from './utils/constants';
+import userRoute from './modules/user/user.route';
+import authRoute from './modules/auth/auth.route';
+import { connectToMongoDatabase } from './utils/mongoose';
+import deserializeUser from './middleware/deserializeUser';
 
 const app = express();
 
-// parse json body
+app.use(cookieParser());
 app.use(express.json());
+app.use(
+  cors({
+    origin: CORS_ORIGIN,
+    credentials: true,
+  })
+);
+app.use(helmet());
+app.use(deserializeUser);
 
-app.get('/api', (req, res) => {
-  res.json({ message: 'Welcome to api!' });
-});
+app.use('/api/users', userRoute);
+app.use('/api/auth', authRoute);
 
-app.get('/api/health', (req, res) => {
-  res.json({ message: 'Healthy' });
+const server = app.listen(PORT, async () => {
+  await connectToMongoDatabase();
+  logger.info(`Listening at http://localhost:${PORT}`);
 });
-
-const port = process.env.PORT || 8080;
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
-});
-server.on('error', console.error);
+server.on('error', logger.error);

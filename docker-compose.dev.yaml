@@ -1,18 +1,4 @@
 services:
-  site:
-    build: 
-      context: .
-      dockerfile: packages/site/Dockerfile
-    ports:
-      - '3000:3000'
-    environment:
-      - PORT=3000
-  api:
-    build: 
-      context: .
-      dockerfile: packages/api/Dockerfile
-    ports:
-      - '8080:8080'
   mongo:
     image: mongo:5.0
     ports:

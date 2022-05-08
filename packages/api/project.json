@@ -3,6 +3,13 @@
   "sourceRoot": "packages/api/src",
   "projectType": "application",
   "targets": {
+    "db": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run start:db",
+        "parallel": false
+      }
+    },
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
@@ -10,7 +17,6 @@
         "outputPath": "dist/packages/api",
         "main": "packages/api/src/main.ts",
         "tsConfig": "packages/api/tsconfig.app.json",
-        "assets": ["packages/api/src/assets"],
         "generatePackageJson": true
       },
       "configurations": {
@@ -29,6 +35,12 @@
     },
     "serve": {
       "executor": "@nrwl/node:node",
+      "dependsOn": [
+        {
+          "target": "db",
+          "projects": "self"
+        }
+      ],
       "options": {
         "buildTarget": "api:build"
       }

@@ -39,3 +39,6 @@ testem.log
 Thumbs.db
 
 /**/.pnpm-debug.log
+
+# Data of the binded volumes
+.data/
