@@ -8,6 +8,11 @@
     "start:db": "docker-compose -f docker-compose.dev.yaml up -d",
     "stop": "docker-compose down"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pnpm nx affected --target=lint"
+    }
+  },
   "dependencies": {
     "@typegoose/typegoose": "^9.8.1",
     "@vitejs/plugin-legacy": "^1.8.0",
@@ -19,6 +24,7 @@
     "helmet": "^5.0.2",
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "mongoose": "^6.3.2",
     "pino": "^7.11.0",
     "react": "17.0.2",

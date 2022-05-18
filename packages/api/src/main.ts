@@ -6,7 +6,7 @@ import cors from 'cors';
 import logger from './utils/logger';
 import { PORT, CORS_ORIGIN } from './utils/constants';
 import userRoute from './modules/user/user.route';
-import authRoute from './modules/auth/auth.route';
+import authRoute from './modules/session/session.route';
 import { connectToMongoDatabase } from './utils/mongoose';
 import deserializeUser from './middleware/deserializeUser';
 

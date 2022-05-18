@@ -1,7 +1,7 @@
 import { loginSchema } from '@uber/interfaces';
 import { Router } from 'express';
 import { processRequestBody } from 'zod-express-middleware';
-import { loginHandler } from './auth.controller';
+import { loginHandler } from './session.controller';
 
 const router = Router();
 
