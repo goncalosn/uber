@@ -21,8 +21,8 @@ const registerUserHandler = async (
       return res.status(StatusCodes.CONFLICT).send('User already exists');
     }
 
-    logger.error(e.message);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+    logger.error(e);
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
 

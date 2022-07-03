@@ -1,4 +1,4 @@
-export const LOCAL_DEV = process.env.LOCAL_DEV || true;
+export const DEV = process.env.DEV || true;
 export const DOMAIN = process.env.DOMAIN || 'localhost';
 export const PORT = process.env.PORT || 8080;
 export const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:3000';

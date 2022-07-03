@@ -6,12 +6,23 @@ on:
         required: true
       HEROKU_EMAIL:
         required: true
+      DOMAIN:
+        required: true
+      CORS_ORIGIN:
+        required: true
+      MONGODB_CONNECTION_STRING:
+        required: true
+      JWT_PRIVATE:
+        required: true
+      JWT_PUBLIC:
+        required: true
 
 jobs:
   dev:
     runs-on: ubuntu-latest
     environment:
       name: development
+      url: https://uber-dev-goncalosn.herokuapp.com
     if: ${{ github.ref != 'refs/heads/master' &&  github.event_name != 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +44,7 @@ jobs:
       - name: Heroku container login
         run: heroku container:login
       - name: Docker build
-        run: docker build -t registry.heroku.com/uber-api-dev-goncalosn/web -f ./packages/api/Dockerfile .
+        run: docker build -t registry.heroku.com/uber-api-dev-goncalosn/web -e DEV=false -e DOMAIN=${{secrets.DOMAIN}} -e CORS_ORIGIN=${{secrets.CORS_ORIGIN}} -e MONGODB_CONNECTION_STRING=${{secrets.MONGODB_CONNECTION_STRING}} -e JWT_PRIVATE=${{secrets.JWT_PRIVATE}} -e JWT_PUBLIC=${{secrets.JWT_PUBLIC}} -f ./packages/api/Dockerfile .
       - name: Heroku push image
         run: docker push registry.heroku.com/uber-api-dev-goncalosn/web
       - name: Heroku release image
@@ -43,6 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
+      url: https://uber-staging-goncalosn.herokuapp.com
     if: ${{ github.event_name == 'pull_request' ||  github.ref == 'refs/heads/master' }}
     steps:
       - uses: actions/checkout@v2
@@ -75,6 +87,7 @@ jobs:
     needs: staging
     environment:
       name: production
+      url: https://uber-goncalosn.herokuapp.com
     if: ${{ github.ref == 'refs/heads/master' && needs.staging.result == 'success' }}
     steps:
       - uses: actions/checkout@v2

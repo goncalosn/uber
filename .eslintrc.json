@@ -31,5 +31,12 @@
       "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
     }
+  ],
+  "no-unused-vars": [
+    "error",
+    {
+      "varsIgnorePattern": "^_+$",
+      "argsIgnorePattern": "^_+$"
+    }
   ]
 }

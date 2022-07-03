@@ -6,7 +6,7 @@
     "db": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "npm run start:db",
+        "command": "pnpm run start:db",
         "parallel": false
       }
     },

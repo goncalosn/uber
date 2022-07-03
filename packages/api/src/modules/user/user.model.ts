@@ -1,11 +1,10 @@
-import bcrypt from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { getModelForClass, prop, pre } from '@typegoose/typegoose';
 import { SALT_ROUNDS } from '../../utils/constants';
 
 @pre<User>('save', async function (next) {
   if (this.isModified('password') || this.isNew) {
-    const hash = await bcrypt.hash(this.password, SALT_ROUNDS);
-    this.password = hash;
+    this.password = await hash(this.password, SALT_ROUNDS);
     return next();
   }
 })
@@ -20,7 +19,7 @@ export class User {
   public password: string;
 
   public async comparePassword(password: string): Promise<boolean> {
-    return bcrypt.compare(password, this.password);
+    return compare(password, this.password);
   }
 }
 

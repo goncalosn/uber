@@ -6,11 +6,11 @@ import cors from 'cors';
 import logger from './utils/logger';
 import { PORT, CORS_ORIGIN } from './utils/constants';
 import userRoute from './modules/user/user.route';
-import authRoute from './modules/session/session.route';
-import { connectToMongoDatabase } from './utils/mongoose';
+import sessionRoute from './modules/session/session.route';
+import { connectToMongoDatabase } from './utils/mongo';
 import deserializeUser from './middleware/deserializeUser';
 
-const app = express();
+export const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use(helmet());
 app.use(deserializeUser);
 
 app.use('/api/users', userRoute);
-app.use('/api/auth', authRoute);
+app.use('/api/auth', sessionRoute);
 
 const server = app.listen(PORT, async () => {
   await connectToMongoDatabase();

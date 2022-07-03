@@ -4,13 +4,15 @@ on:
   pull_request:
 
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
-
   test:
-    needs: build
-    if: ${{ success() && !cancelled() && needs.build.result == 'success' }}
     uses: ./.github/workflows/test.yml
+
+  build:
+    needs: test
+    if: ${{ success() && !cancelled() && needs.test.result == 'success' }}
+    uses: ./.github/workflows/build.yml
+    secrets:
+      MONGODB_CONNECTION_STRING: ${{ secrets.MONGODB_CONNECTION_STRING }}
 
   # JOB to run change detection
   changes:
@@ -50,3 +52,8 @@ jobs:
     secrets:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL}}
+      DOMAIN: ${{ secrets.DOMAIN }}
+      CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
+      MONGODB_CONNECTION_STRING: ${{ secrets.MONGODB_CONNECTION_STRING }}
+      JWT_PRIVATE: ${{ secrets.JWT_PRIVATE }}
+      JWT_PUBLIC: ${{ secrets.JWT_PUBLIC }}

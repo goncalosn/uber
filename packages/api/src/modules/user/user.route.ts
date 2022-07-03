@@ -3,11 +3,9 @@ import { processRequestBody } from 'zod-express-middleware';
 import { registerUserSchema } from '@uber/interfaces';
 
 import { registerUserHandler } from './user.controller';
-import requireUser from '../../middleware/requireUser';
 
-const router = Router();
+const route = Router();
 
-router.post('/', processRequestBody(registerUserSchema), registerUserHandler);
-router.get('/me', requireUser, (req, res) => res.send(res.locals.user));
+route.post('/', processRequestBody(registerUserSchema), registerUserHandler);
 
-export default router;
+export default route;

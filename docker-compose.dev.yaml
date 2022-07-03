@@ -13,6 +13,6 @@ services:
     image: redis:7.0.0
     command: redis-server --requirepass dummy123
     ports:
-      - "6379:6379"    
+      - '6379:6379'
     volumes:
       - ./.data/redis:/data/

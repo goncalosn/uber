@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { get } from 'lodash';
 
 import {
   DOMAIN,
   JWT_EXPIRATION,
   JWT_EXPIRATION_REFRESH,
-  LOCAL_DEV,
+  DEV,
 } from '../../utils/constants';
 import { findUserByEmail } from '../user/user.service';
 import { signJWT } from './session.utils';
@@ -61,7 +60,7 @@ const loginHandler = async (
     domain: DOMAIN,
     path: '/',
     sameSite: 'strict',
-    secure: !LOCAL_DEV,
+    secure: !DEV,
   });
 
   res.cookie('refreshToken', refreshJwt, {
@@ -70,7 +69,7 @@ const loginHandler = async (
     domain: DOMAIN,
     path: '/',
     sameSite: 'strict',
-    secure: !LOCAL_DEV,
+    secure: !DEV,
   });
 
   res.status(StatusCodes.OK).send({ accessJwt, refreshJwt });
@@ -79,7 +78,10 @@ const loginHandler = async (
 const getUserSessionsHandler = async (req: Request, res: Response) => {
   const userId = res.locals.user._id;
 
-  const sessions = await findSession({ user: userId, valid: true });
+  const sessions = await findSession({
+    user: userId,
+    valid: true,
+  });
 
   return res.send(sessions);
 };

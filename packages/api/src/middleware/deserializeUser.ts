@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyJwt } from '../modules/session/session.utils';
 import { reIssueAccessToken } from '../modules/session/session.service';
+import { DEV, DOMAIN } from '../utils/constants';
 
 const deserializeUser = async (
   req: Request,
@@ -33,10 +34,10 @@ const deserializeUser = async (
       res.cookie('accessToken', newAccessToken, {
         maxAge: 900000, // 15 mins
         httpOnly: true,
-        domain: 'localhost',
+        domain: DOMAIN,
         path: '/',
         sameSite: 'strict',
-        secure: false,
+        secure: !DEV,
       });
     }
 
