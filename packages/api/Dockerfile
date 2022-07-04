@@ -10,6 +10,8 @@ RUN apk add --no-cache --virtual .gyp python3 make g++ \
     && npm install \
     && apk del .gyp
 
+# Necessary build arguments for the multiple environments
+
 ARG MONGODB_CONNECTION_STRING
 ENV MONGODB_CONNECTION_STRING=$MONGODB_CONNECTION_STRING
 
