@@ -5,8 +5,10 @@ WORKDIR /usr/src/app
 
 COPY dist/packages/api .
 
-# If you are building your code for production
-RUN npm i --only=production
+# Install dependencies
+RUN apk add --no-cache --virtual .gyp python3 make g++ \
+    && npm install \
+    && apk del .gyp
 
 ARG MONGODB_CONNECTION_STRING
 ENV MONGODB_CONNECTION_STRING=$MONGODB_CONNECTION_STRING
