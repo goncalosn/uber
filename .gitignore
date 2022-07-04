@@ -40,5 +40,7 @@ Thumbs.db
 
 /**/.pnpm-debug.log
 
+pnpm-lock.yaml
+
 # Data of the binded volumes
 .data/

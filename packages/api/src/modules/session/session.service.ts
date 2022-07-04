@@ -9,7 +9,7 @@ const createSession = async (userId: string, userAgent: string) => {
     userAgent,
   });
 
-  return session.toJSON();
+  return session;
 };
 
 const findSession = async (query: FilterQuery<Session>) => {

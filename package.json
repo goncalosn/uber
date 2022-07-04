@@ -4,10 +4,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "nx affected --target=build && docker-compose build && docker-compose up -d --force-recreate",
+    "start": "nx run-many --all --target=build && docker-compose build && docker-compose up -d --force-recreate",
     "start:db": "docker-compose -f docker-compose.dev.yaml up -d",
     "stop": "docker-compose down",
-    "test": "pnpm test:unit && pnpm test:integration",
+    "test": "npm test:unit && pnpm test:integration",
     "test:unit": "nx run-many --target=test --all -- --group=unit --clearCache=true",
     "test:integration": "nx run-many --target=test --all -- --group=integration --clearCache=true"
   },

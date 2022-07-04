@@ -44,7 +44,7 @@ jobs:
       - name: Heroku container login
         run: heroku container:login
       - name: Docker build
-        run: docker build -t registry.heroku.com/uber-api-dev-goncalosn/web -e DEV=false -e DOMAIN=${{secrets.DOMAIN}} -e CORS_ORIGIN=${{secrets.CORS_ORIGIN}} -e MONGODB_CONNECTION_STRING=${{secrets.MONGODB_CONNECTION_STRING}} -e JWT_PRIVATE=${{secrets.JWT_PRIVATE}} -e JWT_PUBLIC=${{secrets.JWT_PUBLIC}} -f ./packages/api/Dockerfile .
+        run: docker build -t registry.heroku.com/uber-api-dev-goncalosn/web --build-arg DEV=false --build-arg DOMAIN=${{secrets.DOMAIN}} --build-arg CORS_ORIGIN=${{secrets.CORS_ORIGIN}} --build-arg MONGODB_CONNECTION_STRING=${{secrets.MONGODB_CONNECTION_STRING}} --build-arg JWT_PRIVATE=${{secrets.JWT_PRIVATE}} --build-arg JWT_PUBLIC=${{secrets.JWT_PUBLIC}} -f ./packages/api/Dockerfile .
       - name: Heroku push image
         run: docker push registry.heroku.com/uber-api-dev-goncalosn/web
       - name: Heroku release image

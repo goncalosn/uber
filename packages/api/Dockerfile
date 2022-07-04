@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:alpine
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -7,6 +7,24 @@ COPY dist/packages/api .
 
 # If you are building your code for production
 RUN npm i --only=production
+
+ARG MONGODB_CONNECTION_STRING
+ENV MONGODB_CONNECTION_STRING=$MONGODB_CONNECTION_STRING
+
+ARG DOMAIN
+ENV DOMAIN=$DOMAIN
+
+ARG CORS_ORIGIN
+ENV CORS_ORIGIN=$CORS_ORIGIN
+
+ARG JWT_PRIVATE
+ENV JWT_PRIVATE=$JWT_PRIVATE
+
+ARG JWT_PUBLIC
+ENV JWT_PUBLIC=$JWT_PUBLIC
+
+ARG DEV
+ENV DEV=$DEV
 
 EXPOSE 8080
 

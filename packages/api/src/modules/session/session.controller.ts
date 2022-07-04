@@ -34,6 +34,7 @@ const loginHandler = async (
 
   // create the payload
   const payload = {
+    // @ts-ignore
     ...omit(user.toJSON(), [
       'password',
       '__v',
